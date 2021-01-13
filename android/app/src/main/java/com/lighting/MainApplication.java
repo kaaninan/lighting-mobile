@@ -4,6 +4,12 @@ import android.app.Application;
 import android.content.Context;
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
+import com.heanoria.library.reactnative.locationenabler.RNAndroidLocationEnablerPackage;
+import org.devio.rn.splashscreen.SplashScreenReactPackage;
+import org.wonday.orientation.OrientationActivityLifecycle;
+
+import com.oblador.vectoricons.VectorIconsPackage;
+import com.polidea.reactnativeble.BlePackage;
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
@@ -43,6 +49,7 @@ public class MainApplication extends Application implements ReactApplication {
   @Override
   public void onCreate() {
     super.onCreate();
+    registerActivityLifecycleCallbacks(OrientationActivityLifecycle.getInstance());
     SoLoader.init(this, /* native exopackage */ false);
     initializeFlipper(this, getReactNativeHost().getReactInstanceManager());
   }

@@ -1,0 +1,16 @@
+<component name="libraryTable">
+  <library name="Gradle: com.github.Polidea:MultiPlatformBleAdapter:0.1.7@aar">
+    <ANNOTATIONS>
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/a76b1e1c26853228ce16dc9c1d9bc741/jetified-MultiPlatformBleAdapter-0.1.7/annotations.zip!/" />
+    </ANNOTATIONS>
+    <CLASSES>
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/a76b1e1c26853228ce16dc9c1d9bc741/jetified-MultiPlatformBleAdapter-0.1.7/AndroidManifest.xml" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/a76b1e1c26853228ce16dc9c1d9bc741/jetified-MultiPlatformBleAdapter-0.1.7/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/a76b1e1c26853228ce16dc9c1d9bc741/jetified-MultiPlatformBleAdapter-0.1.7/res" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.Polidea/MultiPlatformBleAdapter/0.1.7/b878c324581308ba45d5bbf21c2cc26919d8c5bf/MultiPlatformBleAdapter-0.1.7-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

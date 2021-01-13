@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/app.iml" group="lighting/app" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/lighting.iml" filepath="$PROJECT_DIR$/.idea/modules/lighting.iml" group="lighting" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/1074466597/lottie-react-native.iml" filepath="$PROJECT_DIR$/.idea/modules/1074466597/lottie-react-native.iml" group="lighting/lottie-react-native" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/1414112122/react-native-android-location-enabler.iml" filepath="$PROJECT_DIR$/.idea/modules/1414112122/react-native-android-location-enabler.iml" group="lighting/react-native-android-location-enabler" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/355180826/react-native-async-storage_async-storage.iml" filepath="$PROJECT_DIR$/.idea/modules/355180826/react-native-async-storage_async-storage.iml" group="lighting/react-native-async-storage_async-storage" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/805835013/react-native-ble-plx.iml" filepath="$PROJECT_DIR$/.idea/modules/805835013/react-native-ble-plx.iml" group="lighting/react-native-ble-plx" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/619736982/react-native-bluetooth-status.iml" filepath="$PROJECT_DIR$/.idea/modules/619736982/react-native-bluetooth-status.iml" group="lighting/react-native-bluetooth-status" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/855877542/react-native-color-picker-light.iml" filepath="$PROJECT_DIR$/.idea/modules/855877542/react-native-color-picker-light.iml" group="lighting/react-native-color-picker-light" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-1571023016/react-native-community_blur.iml" filepath="$PROJECT_DIR$/.idea/modules/-1571023016/react-native-community_blur.iml" group="lighting/react-native-community_blur" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-79024298/react-native-community_masked-view.iml" filepath="$PROJECT_DIR$/.idea/modules/-79024298/react-native-community_masked-view.iml" group="lighting/react-native-community_masked-view" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-111506879/react-native-gesture-handler.iml" filepath="$PROJECT_DIR$/.idea/modules/-111506879/react-native-gesture-handler.iml" group="lighting/react-native-gesture-handler" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-1188236262/react-native-orientation-locker.iml" filepath="$PROJECT_DIR$/.idea/modules/-1188236262/react-native-orientation-locker.iml" group="lighting/react-native-orientation-locker" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-825825409/react-native-permissions.iml" filepath="$PROJECT_DIR$/.idea/modules/-825825409/react-native-permissions.iml" group="lighting/react-native-permissions" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/190508859/react-native-reanimated.iml" filepath="$PROJECT_DIR$/.idea/modules/190508859/react-native-reanimated.iml" group="lighting/react-native-reanimated" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/867440234/react-native-safe-area-context.iml" filepath="$PROJECT_DIR$/.idea/modules/867440234/react-native-safe-area-context.iml" group="lighting/react-native-safe-area-context" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-1615162622/react-native-screens.iml" filepath="$PROJECT_DIR$/.idea/modules/-1615162622/react-native-screens.iml" group="lighting/react-native-screens" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-1540400947/react-native-splash-screen.iml" filepath="$PROJECT_DIR$/.idea/modules/-1540400947/react-native-splash-screen.iml" group="lighting/react-native-splash-screen" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/1087675701/react-native-vector-icons.iml" filepath="$PROJECT_DIR$/.idea/modules/1087675701/react-native-vector-icons.iml" group="lighting/react-native-vector-icons" />
+    </modules>
+  </component>
+</project>
