@@ -10,7 +10,7 @@ export default {
   disabled: '#C6CBD4',
 
   red: '#E02021',
-  green: '#5CA91E',
+  green: '#65CD67',
   orange: '#F66420',
 
   yellow: '#ECAA55',

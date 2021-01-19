@@ -113,7 +113,7 @@ const styles = StyleSheet.create({
     },
 
     text: {
-        fontFamily: 'Rubik-Medium',
+        fontFamily: 'Avenir-Book',
         fontSize: 15,
         color: colors.white,
         lineHeight: 22,
@@ -128,7 +128,7 @@ const styles = StyleSheet.create({
     },
 
     buttonText: {
-        fontFamily: 'Rubik-Medium',
+        fontFamily: 'Avenir-Book',
         fontSize: 15,
         color: colors.bluePrimary,
         lineHeight: 22,

@@ -1,47 +1,64 @@
 import React, { Component } from 'react'
 import { Text, StyleSheet, View } from 'react-native'
 
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-
 import colors from '../styles/colors'
 import { paddingScreen } from '../styles/metrics';
 
 import Slider from "react-native-slider";
 import SegmentedControl from '@react-native-community/segmented-control';
+import { ColorPicker } from 'react-native-color-picker'
 
 export default class ControlComponent extends Component {
 
     constructor(props) {
         super(props)
-        this.value = this.props.value
-    }
-
-    componentDidUpdate(){
-        this.value = this.props.value
     }
 
     getText(){
         if(this.props.type == 'percent'){
-            return parseInt(this.value * 100) + "%"
+            return parseInt(this.props.value * 100) + "%"
         }else if(this.props.type == 'degree'){
-            return parseInt(this.value * 360) + "°"
+            return parseInt(this.props.value * 360) + "°"
         }
+    }
+
+
+    renderColorPicker(){
+        return(
+            <View style={{ flex: 1 }} pointerEvents={this.props.disabled ? 'none' : 'auto'}>
+                <ColorPicker
+                    onColorChange={color => {
+                        this.props.onValueChange({ color: {
+                            hue: color.h/360, // [0,360] => [0,1]
+                            saturation: this.props.value.saturation,
+                            value: this.props.value.value,
+                        }})
+                    }}
+                    color={{
+                        h: this.props.value.hue * 360, // [0,1] => [0, 360]
+                        s: this.props.value.saturation,
+                        v: this.props.value.value
+                    }}
+                    onColorSelected={() => this.props.onColorSelected()}
+                    style={this.props.style}
+                    hideSliders={true} />
+            </View>
+        )
     }
 
 
     renderSlider(){
         return(
             <Slider
-                value={this.value}
+                value={this.props.value}
+                disabled={this.props.disabled}
                 trackStyle={sliderStyle.track}
-                thumbStyle={sliderStyle.thumb}
+                thumbStyle={this.props.disabled ? sliderDisabledStyle.thumb : sliderStyle.thumb}
                 maximumTrackTintColor={colors.softBlack}
                 minumumTrackTintColor={colors.lightGray}
-                onValueChange={value => {
-                    this.props.onValueChange(value)
-                    this.value = value
-                }}
+                animateTransitions={this.props.animation}
+                animationType={'timing'}
+                onValueChange={value => { this.props.onValueChange(value) }}
                 />
         )
     }
@@ -50,7 +67,8 @@ export default class ControlComponent extends Component {
         return(
             <SegmentedControl
                 values={this.props.values}
-                selectedIndex={this.value}
+                enabled={!this.props.disabled}
+                selectedIndex={this.props.value}
                 appearance={'light'}
                 backgroundColor={colors.softBlack}
                 style={{ marginTop: paddingScreen / 3 }}
@@ -67,9 +85,11 @@ export default class ControlComponent extends Component {
                     fontWeight: 'normal'
                 }}
                 tintColor={colors.white}
-                onChange={(event) => {
-                    this.props.onValueChange(event.nativeEvent.selectedSegmentIndex)
-                    this.value = event.nativeEvent.selectedSegmentIndex
+                onValueChange={(value) => {
+                    if(this.props.value != this.props.values.indexOf(value)){
+                        this.props.onValueChange(this.props.values.indexOf(value))
+                        this.props.value = this.props.values.indexOf(value)
+                    }
                 }}
             />
         )
@@ -85,6 +105,9 @@ export default class ControlComponent extends Component {
 
             case 'segment':
                 return this.renderSegment()
+
+            case 'colorPicker':
+                return this.renderColorPicker()
         
             default:
                 break;
@@ -156,8 +179,22 @@ var sliderStyle = StyleSheet.create({
         height: 30,
         borderRadius: 30 / 2,
         backgroundColor: 'white',
-        // borderColor: '#30a935',
-        // borderWidth: 2,
     }
+
+});
+
+var sliderDisabledStyle = StyleSheet.create({
+
+    track: {
+        height: 6,
+        borderRadius: 2,
+    },
     
+    thumb: {
+        width: 30,
+        height: 30,
+        borderRadius: 30 / 2,
+        backgroundColor: colors.gray,
+    }
+
 });

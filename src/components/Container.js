@@ -20,7 +20,7 @@ export default class Container extends Component {
     render() {
         return (
             <View style={styles.container}>
-                <StatusBar barStyle='light-content' backgroundColor={colors.softBlack} />
+                <StatusBar barStyle='light-content' backgroundColor={colors.black} />
                 
                 {this.props.scroll ?
                 <KeyboardAwareScrollView
@@ -33,9 +33,9 @@ export default class Container extends Component {
                     {this.props.children}
                 </KeyboardAwareScrollView>
                 :
-                <SafeAreaView style={[styles.container, this.props.style]}>
+                <View style={[styles.container, this.props.style]}>
                     {this.props.children}
-                </SafeAreaView>
+                </View>
                 }
             </View>
         )

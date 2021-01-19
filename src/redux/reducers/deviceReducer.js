@@ -8,6 +8,10 @@ const initialState = {
 
 	// Details
 	name: null,
+	serialNumber: null,
+	firmwareRevision: null,
+	hardwareRevision: null,
+	manufacturer: 'Inteachlab Technologies',
 };
 
 const deviceReducer = (state = initialState, action) => {
@@ -22,19 +26,32 @@ const deviceReducer = (state = initialState, action) => {
 				name: action.payload.name,
 			}
 		}
+		case 'UPDATE': {
+
+			return {
+				...state,
+				device: action.payload.device,
+				manager: action.payload.manager,
+				isConnected: true,
+				name: action.payload.name,
+				serialNumber: null,
+				firmwareRevision: null,
+				hardwareRevision: null,
+				manufacturer: 'BAUMIND', // TODO
+			}
+		}
 		case 'DISCONNECT': {
-			console.warn('disconnect reducer')
-			state.manager.cancelTransaction('monitorID')
-			// state.device.cancelConnection()
-			// 	.then(e => {})
-			// 	.catch(error => {})
-			// // state.manager.destroy()
+			state.manager.cancelTransaction('batteryLevel')
+			state.manager.cancelTransaction('batteryStatus')
+			state.manager.cancelTransaction('ledValue')
+			state.manager.cancelTransaction('ledStatus')
+			state.manager.cancelTransaction('ledMode')
+			state.manager.destroy()
 
 			return {
 				...state,
 				device: null,
 				isConnected: false,
-				name: null,
 			}
 		}
 		default: {

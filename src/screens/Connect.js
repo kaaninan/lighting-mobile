@@ -20,10 +20,8 @@ import { paddingScreen } from '../styles/metrics'
 import * as Animatable from 'react-native-animatable';
 
 import Container from '../components/Container';
-import Button from '../components/Button';
 import AlertBox from '../components/AlertBox';
 
-import Icon from 'react-native-vector-icons/Ionicons';
 import LottieView from 'lottie-react-native';
 import { Buffer } from 'buffer';
 import { BleManager } from 'react-native-ble-plx';
@@ -31,16 +29,14 @@ import {check, PERMISSIONS, RESULTS, request, openSettings} from 'react-native-p
 import RNAndroidLocationEnabler from 'react-native-android-location-enabler';
 import { BluetoothStatus } from 'react-native-bluetooth-status';
 import DropdownAlert from 'react-native-dropdownalert';
-import Dialog from "react-native-dialog";
-import { BlurView } from "@react-native-community/blur";
 
+import {service, characteristic} from '../bluetooth/services'
+import command from '../bluetooth/commands'
 
 class Connect extends Component {
 
     static navigationOptions = ({navigation}) => ({
         headerTitle: "Connect",
-        // headerLeft: <HeaderBack onPress={() => navigation.goBack('list-1')} />,
-        // headerRight: <HeaderInfo onPress={() => navigation.state.params.onPressInfo()} />,
     })
 
     constructor(props) {
@@ -49,13 +45,11 @@ class Connect extends Component {
         this.state = {
             loading: false,
             appState: AppState.currentState,
-
             isAlertShows: false,
         }
 
         this.manager = new BleManager('restoreStateIdentifier', );
         this.deviceList = new Array();
-        this.device = null;
 
         this.permissionStatus = false;
         this.bluetoothState = false;
@@ -68,7 +62,6 @@ class Connect extends Component {
     }
 
     // Overflow
-    // A0. Prepare Data Buffer (async)
     // A1. Permission Check
     // A2. Bluetooth State Check
     // B1. Handle Alert Box
@@ -80,33 +73,24 @@ class Connect extends Component {
 
     componentDidMount() {
 
-        // this.props.navigation.replace('Monitor')
-        // return
-
         // If already connected to device go checkStatus directly
-        if(this.props.device != null && this.props.isConnected == true){
-            this.setState({loading: true})
-            // to be sure, connect again
+        // if(this.props.device != null && this.props.isConnected == true){
+        //     this.setState({loading: true})
+        //     // to be sure, connect again
 
-            if(Platform.OS == 'android'){
-                this.device = this.props.device; // for _stopExperiment
-                // add distance to saved redux experiment
-                this.moveOn(this.props.device);
+        //     if(Platform.OS == 'android'){
+        //         this.moveOn(this.props.device);
             
-            }else{
-                this.props.device.connect({timeout: 5000, autoConnect: false, requestMTU: 256})
-                    .then((device) => {
-                        return device.discoverAllServicesAndCharacteristics();
-                    })
-                    .then((device) => {
-                        // this.manager.isDeviceConnected(device.id).then(d => {
-                            this.device = device; // for _stopExperiment
-                            // add distance to saved redux experiment
-                            this.moveOn(device);
-                    // })
-                })
-            }
-        }
+        //     }else{
+        //         this.props.device.connect({timeout: 5000, autoConnect: false, requestMTU: 256})
+        //             .then((device) => {
+        //                 return device.discoverAllServicesAndCharacteristics();
+        //             })
+        //             .then((device) => {
+        //                 this.moveOn(device);
+        //         })
+        //     }
+        // }
 
         AppState.addEventListener('change', this._handleAppStateChange);
         this._navListener = this.props.navigation.addListener('willFocus', payload => {
@@ -271,7 +255,6 @@ class Connect extends Component {
     // C1
     startConnection = () => {
 
-
         // Daha once arama yapilmis ve liste gosterilmisse kapat
         if(this.isListShows == true){
             this.hideDeviceList().then(() => {
@@ -323,7 +306,7 @@ class Connect extends Component {
 
             // Butun cihazlari listeye ekle
             if(device.name != null){
-                if((device.name).includes('Core') || (device.name).includes('CORE')){
+                if((device.name).includes('coLighting')){
                     var move_on = 1;
 
                     // Ayni cihazi defalarca ekleme
@@ -356,7 +339,7 @@ class Connect extends Component {
         if(this.deviceList.length > 0){
             clearInterval(this.interval);
             this.showDeviceList();
-            // this.connect(this.deviceList[0]);
+            // this.connect(this.deviceList[0]); // AutoConnect
         }
     }
 
@@ -367,41 +350,81 @@ class Connect extends Component {
         this.bluetoothStop();
         this.setConnectionIndicator(device.name, true);
         
-        // console.warn('Start Connecting')
         device.connect({timeout: 5000, autoConnect: false, requestMTU: 512})
             .then((device) => {
-                // console.warn('Discover')
                 return device.discoverAllServicesAndCharacteristics();
             })
             .then((device) => {
-                // console.warn('Connected')
                 this.manager.isDeviceConnected(device.id).then(d => {
 
-                    console.log("MTU: ", device.mtu)
-
-                    this.device = device; // for _stopExperiment
-
-                    // *** EVENTS ***
 
                     // Set Disconnect Listener
                     this.manager.onDeviceDisconnected(device.id, (error, device) => {
-                        console.warn('Disconnect Monitor')
                         this.props.disconnectDevice();
                     })
 
-                    var bleDevice = {
-                        device: device,
-                        manager: this.manager,
-                        name: device.name,
-                    }
 
-                    this.props.connectDevice(bleDevice);
-                    this.moveOn(device);
+                    // Battery Level and State
+                    device.monitorCharacteristicForService(service.battery, characteristic.battery_state, (error, characteristic) => {
+                        if(error == null){
+                            var state = Buffer.from(characteristic.value, 'base64').toString('ascii')
+                            var tempState = state.charCodeAt(0).toString()
+                            // eger 3 gelirse unknown durum
+                            if(tempState != '0' && tempState != '1' && tempState != '2'){ tempState = '0' }
+                            global.batteryState = tempState;
+                            
+                        }
+                    }, 'batteryState')
+
+                    device.monitorCharacteristicForService(service.battery, characteristic.battery_level, (error, characteristic) => {
+                        if(error == null){
+                            var level = Buffer.from(characteristic.value, 'base64').toString('ascii')
+                            global.batteryLevel = level.charCodeAt(0).toString();
+                            // console.warn(level.charCodeAt(0).toString())
+                        }
+                    }, 'batteryLevel')
+
+
+                    var promise1 = device.readCharacteristicForService(service.device, characteristic.device_serial_number)
+                    var promise2 = device.readCharacteristicForService(service.device, characteristic.device_firmware_revision)
+                    var promise3 = device.readCharacteristicForService(service.device, characteristic.device_hardware_revision)
+                    var promise4 = device.readCharacteristicForService(service.battery, characteristic.battery_level)
+                    var promise5 = device.readCharacteristicForService(service.battery, characteristic.battery_state)
+
+                    
+                    Promise.all([promise1, promise2, promise3, promise4, promise5]).then((values) => {
+                        var serial_number = Buffer.from(values[0].value, 'base64').toString('ascii')
+                        var firmware_revision = parseInt(Buffer.from(values[1].value, 'base64').toString('ascii'))
+                        var hardware_revision = Buffer.from(values[2].value, 'base64').toString('ascii')
+
+                        var level = Buffer.from(values[3].value, 'base64').toString('ascii').charCodeAt(0).toString()
+                        var state = Buffer.from(values[4].value, 'base64').toString('ascii').charCodeAt(0).toString()
+
+                        var bleDevice = {
+                            device: device,
+                            manager: this.manager,
+                            name: device.name,
+                            serialNumber: serial_number,
+                            firmwareRevision: firmware_revision,
+                            hardwareRevision: hardware_revision,
+                        }
+
+                        global.batteryLevel = level
+                        global.batteryState = state
+                        
+                        this.props.connectDevice(bleDevice);
+                        this.moveOn(device);
+
+                    }).catch(e => {
+                        console.warn(e)
+                        console.warn('error')
+                        
+                    })
 
                 });
             })
             .catch((error) => {
-                // console.error(error);
+                console.error(error);
                 this.dropDownAlertRef.alertWithType('error', 'Error', "Could not connect to device. Please try again.");
                 setTimeout(() => {
                     this.checkPermission();
@@ -410,14 +433,13 @@ class Connect extends Component {
     }
 
     moveOn = (device) => {
-        this.props.navigation.replace('Monitor')
+        this.props.navigation.replace('Control')
     }
 
 
     // UI Functions
 
     showAlertBox = () => {
-        console.warn('show')
         if(this.state.isAlertShows == false){
             setTimeout(() => {
                 this._alertbox.fadeInDown().then(() => { this.setState({isAlertShows: true}); });
@@ -539,7 +561,7 @@ class Connect extends Component {
 
                     <View style={{ marginTop: 50, marginBottom: 100 }}>
                         <LottieView
-                            source={require('../assets/animations/3721-bluetooth.json')}
+                            source={require('../assets/animations/8714-light-bulb-loader.json')}
                             style={{ width: 300 }}
                             autoPlay
                             loop />
@@ -567,7 +589,7 @@ class Connect extends Component {
                     
                     <SafeAreaView style={{flex: 1}}>
                         <Animatable.View style={styles.lottieContainer} ref={(c) => this._bluetooth_icon = c } duration={650}>
-                            <LottieView source={require('../assets/animations/3721-bluetooth')} autoPlay loop style={styles.lottie} />
+                            <LottieView source={require('../assets/animations/8714-light-bulb-loader.json')} autoPlay loop style={styles.lottie} />
                         </Animatable.View>
 
                         <View style={styles.listContainer}>
@@ -601,7 +623,7 @@ const styles = StyleSheet.create({
     listView: {
         flex: 1,
         opacity: 0,
-        backgroundColor: colors.white,
+        backgroundColor: colors.softBlack,
         marginHorizontal: -paddingScreen,
     },
 
@@ -616,11 +638,10 @@ const styles = StyleSheet.create({
 
     listItem:{
         fontSize: 21,
-        fontFamily: 'Rubik-Medium',
+        fontFamily: 'Avenir-Book',
         textAlign: 'center',
         color: colors.white,
     },
-
 
 
     lottieContainer: {
@@ -634,9 +655,8 @@ const styles = StyleSheet.create({
 
     lottie: {
         zIndex: 1,
-        width: '80%',
+        width: '40%',
     },
-
 
     
 
@@ -647,7 +667,7 @@ const styles = StyleSheet.create({
     },
 
     infoText: {
-        fontFamily: 'Rubik-Bold',
+        fontFamily: 'Avenir-Book',
         fontSize: 18,
         textAlign: 'center',
         color: colors.white,

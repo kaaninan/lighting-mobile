@@ -14,7 +14,7 @@ const RootStack = createStackNavigator({
 	Router: {
 		screen: Router,
 		navigationOptions: {
-			gesturesEnabled: false
+			gestureEnabled: false
 		}
 	},
 
@@ -23,7 +23,7 @@ const RootStack = createStackNavigator({
 		screen: Connect,
 		navigationOptions: {
 			animationEnabled: false,
-			gesturesEnabled: false
+			gestureEnabled: false
 		}
 	},
 
@@ -32,7 +32,7 @@ const RootStack = createStackNavigator({
 		screen: Control,
 		navigationOptions: {
 			animationEnabled: false,
-			gesturesEnabled: false
+			gestureEnabled: false
 		}
 	},
 
@@ -41,21 +41,21 @@ const RootStack = createStackNavigator({
 	// Registration: {
 	// 	screen: RegistrationNavigator,
 	// 	// navigationOptions: {
-	// 	// 	gesturesEnabled: false
+	// 	// 	gestureEnabled: false
 	// 	// }
 	// },
 	
 	// App: {
 	// 	screen: AppNavigator,
 	// 	navigationOptions: {
-	// 		gesturesEnabled: false
+	// 		gestureEnabled: false
 	// 	}
 	// },
 
 	// ForceUpdate: {
 	// 	screen: AppUpdate,
 	// 	navigationOptions: {
-	// 		gesturesEnabled: false
+	// 		gestureEnabled: false
 	// 	}
 	// }
 	
